@@ -5,6 +5,7 @@ import { Card, Dropdown, Form, Select } from 'semantic-ui-react'
 
 const Categories = () => {
   const [categories, setCategories] = useState([
+          {key: 'All', text: 'All Products', value: 'All'},
           {key: 'Accessories', text: 'Accessories', value: 'Accessories'},
           {key:'Apparel', text: 'Apparel', value: 'Apparel'},
           {key: 'Home', text: 'Home', value: 'Home'},
@@ -16,6 +17,7 @@ const Categories = () => {
           {key:'Toys', text: 'Toys', value: 'Toys'}])
 
   const [products, setProducts] = useState([])
+  const [showCategories, setShowCategories] = useState(true)
 
   // useEffect(()=>{
   //   getProducts()
@@ -28,8 +30,17 @@ const Categories = () => {
 
   const handleChange =  async (e, {value}) => {
     try{
+      if(value != 'All'){
       let res =  await axios.get(`/api/categories/${value}`)
       setProducts(res.data)
+      setShowCategories(false)
+      }
+      else{
+      let res = await axios.get('api/products')
+      setProducts(res.data)
+      setShowCategories(true)
+      }
+      
     }catch(err){
       alert(err)
     }
@@ -39,10 +50,18 @@ const Categories = () => {
     return(
       <Card.Group style={{marginTop: '20px'}}>
         {products.map( p => (
-          <Card 
-            header={p.description}
-            meta={`Price: $${p.price}`}
-          />
+          <>
+          <Card style={{padding: '10px'}}>
+            <Card.Header>
+              <h3>{p.description}</h3>
+            </Card.Header>
+            <Card.Meta>
+              <p>{`Price: $${p.price}`}</p>
+              <p>{showCategories && `Category: ${p.category}`}</p>
+              
+            </Card.Meta>
+          </Card>
+          </>
         ))}
       </Card.Group>
     )
