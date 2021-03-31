@@ -1,39 +1,38 @@
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
-import { Form, Select } from 'semantic-ui-react'
+import { Dropdown, Form, Select } from 'semantic-ui-react'
 // form at top to pick category, then filters by the category you want
 
 const Categories = () => {
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([
+          {key: 'Accessories', text: 'Accessories', value: 'Accessories'},
+          {key:'Apparel', text: 'Apparel', value: 'Apparel'},
+          {key: 'Home', text: 'Home', value: 'Home'},
+          {key:'Living', text: 'Living', value: 'Living'},
+          {key:'Wedding', text: 'Wedding', value: 'Wedding'},
+          {key:'Entertainment', text: 'Entertainment', value: 'Entertainment'},
+          {key:'Collectibles', text: 'Collectibles', value: 'Collectibles'},
+          {key: 'Crafts', text: 'Crafts', value: 'Crafts'},
+          {key:'Toys', text: 'Toys', value: 'Toys'}])
 
-  const categoriesList = [
-    'Accessories',
-    'Apparel',
-    'Home',
-    'Living',
-    'Wedding',
-    'Entertainment',
-    'Collectibles',
-    'Crafts',
-    'Toys'
-  ]
+  const [products, setProducts] = useState([])
 
   useEffect(()=>{
-    getCategories()
+    getProducts()
     },[])
 
-
-
-  const getCategories = async () =>{
-    let res = await axios.get('/api/categories')
-    setCategories(res.data)
-    console.log("file: Categories.js ~ line 17 ~ getCategories ~ res.data", res.data)
+  const getProducts = async () => {
+    let res = await axios.get('/api/products')
+    setProducts(res.data)
   }
+
+ 
 
   // const normalizeCategoryData = (categoryArr) => {
   //   return categoryArr.map( c=>{
-  //     return { key: c, text: c, value: c.category }
-  // })
+  //     return { key: c, text: c, value: c.category }}
+  //     )
+  //   }
 
   // const handleChange =  async (e, {value}) => {
   //   try{
@@ -46,18 +45,18 @@ const Categories = () => {
   // }
 
   
-
-  // const renderCategories = () => {
-   
-    
-  // }
-  
   
   return (
     <div>
       <h1>Categories</h1>
-      {/* {renderCategories()} */}
+      <Dropdown
+        placeholder='Select a Category'
+        fluid
+        selection
+        options={categories}
+      />
     </div>
+    
   )
 }
 
