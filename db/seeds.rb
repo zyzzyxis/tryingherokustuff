@@ -24,7 +24,7 @@ categories = [
   )
 
   10.times do
-    num_categories = rand(0..categories.length - 1);
+    num_categories = rand(1..categories.length - 1);
     Buyer.create(
       name: Faker::Name.name,
       max_price: rand(99000..1500000),
@@ -34,7 +34,7 @@ categories = [
   end
   
   10.times do
-    num_categories = rand(0..categories.length - 1);
+    num_categories = rand(1..categories.length - 1);
     price = rand(99000..1500000)
     p = Product.create(
       price: price,
