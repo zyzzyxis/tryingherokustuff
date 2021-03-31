@@ -41,7 +41,7 @@ const Categories = () => {
         {products.map( p => (
           <Card 
             header={p.description}
-            meta={p.price}
+            meta={`Price: $${p.price}`}
           />
         ))}
       </Card.Group>
