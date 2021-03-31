@@ -37,7 +37,7 @@ const Categories = () => {
 
   const renderProducts = () => {
     return(
-      <Card.Group>
+      <Card.Group style={{marginTop: '20px'}}>
         {products.map( p => (
           <Card 
             header={p.description}
