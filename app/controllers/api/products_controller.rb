@@ -12,5 +12,4 @@ class Api::ProductsController < ApplicationController
     render json: Product.categories_index(category)
   end
 
-
 end
