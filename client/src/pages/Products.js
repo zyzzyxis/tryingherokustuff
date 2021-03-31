@@ -22,6 +22,7 @@ const Products = () => {
     ids.map( id => {
       let products = data.filter( d => d.seller_id === id );
       let { seller_id, name, email } = products[0];
+
       let sellerProducts = products.map( p => { 
         let { description, price, category, product_id } = p;
         return { description, price, category, product_id };
@@ -31,6 +32,7 @@ const Products = () => {
 
       sellerArray.push(detail);
     });
+    
     setSellers(sellerArray)
   }
 
@@ -60,7 +62,7 @@ const Products = () => {
               let { seller_id, name, email, products } = seller;
               return (
                 <List.Item key={seller_id}>
-                  <List.Header>{name} - {email}</List.Header>
+                  <List.Header><h2>{name} - {email}</h2></List.Header>
                   <List.Item>
                     <Table celled>
                       <Table.Header>
