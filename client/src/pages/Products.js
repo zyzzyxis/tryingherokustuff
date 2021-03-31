@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import {List, Table, Header, Card} from 'semantic-ui-react'
+import {List, Table} from 'semantic-ui-react'
 
 const Products = () => {
-  const [products, setProducts] = useState([])
+
+  // const [products, setProducts] = useState([]) //not used, replaced w/ sellers array for data restructure
   const [sellers, setSellers] = useState([])
 
 
@@ -21,8 +22,8 @@ const Products = () => {
       let products = data.filter( d => d.seller_id === id );
       let { seller_id, name, email } = products[0];
       let sellerProducts = products.map( p => { 
-        let { description, price, category, id } = p;
-        return { description, price, category, id };
+        let { description, price, category, product_id } = p;
+        return { description, price, category, product_id };
       });
 
       let detail = { seller_id, name, email, products: sellerProducts, };
@@ -37,19 +38,21 @@ const Products = () => {
   },[])
 
   const renderProducts = (products) => {
+    //Called in renderSellers to insert each product row
+    // console.log(products)
     return products.map( p => 
-        <Table.Row key= {p.id} >
-          <Table.Cell>${p.price}</Table.Cell>
-          <Table.Cell>{p.category}</Table.Cell>
+        <Table.Row key= {p.product_id} >
           <Table.Cell>{p.description}</Table.Cell>
+          <Table.Cell>{p.category}</Table.Cell>
+          <Table.Cell>${p.price}</Table.Cell>
         </Table.Row>
     )
   }
 
 
   const renderSellers = () =>{
-    console.log('renderSellers called')
-    console.log(sellers)
+    // console.log('renderSellers called')
+    // console.log(sellers)
       return (
         <List>
           { sellers.map( seller => {
@@ -61,9 +64,9 @@ const Products = () => {
                     <Table celled>
                       <Table.Header>
                         <Table.Row>
-                          <Table.HeaderCell>Price</Table.HeaderCell>
-                          <Table.HeaderCell>Category</Table.HeaderCell>
                           <Table.HeaderCell>Description</Table.HeaderCell>
+                          <Table.HeaderCell>Category</Table.HeaderCell>
+                          <Table.HeaderCell>Price</Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
