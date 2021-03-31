@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
-import { Dropdown, Form, Select } from 'semantic-ui-react'
+import { Card, Dropdown, Form, Select } from 'semantic-ui-react'
 // form at top to pick category, then filters by the category you want
 
 const Categories = () => {
@@ -17,44 +17,51 @@ const Categories = () => {
 
   const [products, setProducts] = useState([])
 
-  useEffect(()=>{
-    getProducts()
-    },[])
+  // useEffect(()=>{
+  //   getProducts()
+  //   },[])
 
-  const getProducts = async () => {
-    let res = await axios.get('/api/products')
-    setProducts(res.data)
-  }
-
- 
-
-  // const normalizeCategoryData = (categoryArr) => {
-  //   return categoryArr.map( c=>{
-  //     return { key: c, text: c, value: c.category }}
-  //     )
-  //   }
-
-  // const handleChange =  async (e, {value}) => {
-  //   try{
-  //     let res =  await axios.get(`/api/categories/${value}`)
-
-
-  //   }catch(err){
-  //     alert(err)
-  //   }
+  // const getProducts = async () => {
+  //   let res = await axios.get('/api/products')
+  //   setProducts(res.data)
   // }
 
-  
+  const handleChange =  async (e, {value}) => {
+    try{
+      let res =  await axios.get(`/api/categories/${value}`)
+      setProducts(res.data)
+    }catch(err){
+      alert(err)
+    }
+  }
+
+  const renderProducts = () => {
+    return(
+      <Card.Group>
+        {products.map( p => (
+          <Card 
+            header={p.description}
+            meta={p.price}
+          />
+        ))}
+      </Card.Group>
+    )
+  }
+
+  //todo when selecting the category, will return any product that 'contains the category' in their category array
   
   return (
     <div>
       <h1>Categories</h1>
       <Dropdown
+        onChange={handleChange}
         placeholder='Select a Category'
         fluid
         selection
         options={categories}
       />
+      {products && renderProducts()}
+      {!products && <p>No Products available</p>}
     </div>
     
   )

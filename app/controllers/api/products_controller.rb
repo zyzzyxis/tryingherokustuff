@@ -7,4 +7,10 @@ class Api::ProductsController < ApplicationController
     render json: Product.categories_index
   end
 
+  def category
+    category = params[:category]
+    render json: Product.categories_index(category)
+  end
+
+
 end

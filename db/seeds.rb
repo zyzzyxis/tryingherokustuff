@@ -34,12 +34,13 @@ categories = [
   end
   
   10.times do
-    num_categories = rand(1..categories.length - 1);
+    category_sample = categories.sample(1).join('')
+    # num_categories = rand(1..categories.length - 1);
     price = rand(99000..1500000)
     p = Product.create(
       price: price,
       description: Faker::House.furniture ,
-      category: categories.sample(num_categories),
+      category: category_sample,
       seller_id: a.id
   )
   end
