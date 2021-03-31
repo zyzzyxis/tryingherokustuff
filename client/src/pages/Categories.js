@@ -19,15 +19,6 @@ const Categories = () => {
   const [products, setProducts] = useState([])
   const [showCategories, setShowCategories] = useState(true)
 
-  // useEffect(()=>{
-  //   getProducts()
-  //   },[])
-
-  // const getProducts = async () => {
-  //   let res = await axios.get('/api/products')
-  //   setProducts(res.data)
-  // }
-
   const handleChange =  async (e, {value}) => {
     try{
       if(value != 'All'){
@@ -80,8 +71,8 @@ const Categories = () => {
       {products && renderProducts()}
       {!products && <p>No Products available</p>}
     </div>
-    
   )
+  
 }
 
 export default Categories
