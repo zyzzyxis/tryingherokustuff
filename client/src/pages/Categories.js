@@ -47,8 +47,6 @@ const Categories = () => {
       </Card.Group>
     )
   }
-
-  //todo when selecting the category, will return any product that 'contains the category' in their category array
   
   return (
     <div>
