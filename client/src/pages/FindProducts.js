@@ -94,13 +94,14 @@ return (
         />
       </div>
       <div>
+        {chosenCategory ? 
         <Dropdown
           onChange={onSellerChange}
           placeholder='Select a Seller'
           fluid
           selection
           options={sellers}
-        />
+        /> : <h4></h4> }
       </div>
       </>
     ) : (<h1>"loading"</h1>)}
