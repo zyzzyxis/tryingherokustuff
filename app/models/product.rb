@@ -19,4 +19,9 @@ class Product < ApplicationRecord
 # from products as p
 #      where p.category like '%';
 
+select p.id as product_id, p.price, p.description, p.category, s.id as seller_id, s.name, s.email
+from products p
+join sellers s
+on p.seller_id = s.id
+
 end
