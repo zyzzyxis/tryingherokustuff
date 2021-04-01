@@ -1,12 +1,14 @@
 class Api::ProductsController < ApplicationController
-  # before_action :set_page
+  before_action :set_page
 
   def index
     render json: Product.available
   end
 
   def categories_index
-    render json: Product.categories_index
+    # render json: Product.categories_index
+    products = Product.page(@page).categories_index
+    render json: { products: products, total_pages: products.total_pages }
   end
 
   def category
@@ -20,9 +22,9 @@ class Api::ProductsController < ApplicationController
     render json: Product.products_find(category, seller_id)
     end
     
-  # private
-  # def set_page
-  #   @page = params[:page] || 1
-  # end
+  private
+  def set_page
+    @page = params[:page] || 1
+  end
 
 end

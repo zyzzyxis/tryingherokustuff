@@ -7,10 +7,15 @@ const Products = () => {
   // const [products, setProducts] = useState([]) //not used, replaced w/ sellers array for data restructure
   
   const [sellers, setSellers] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(null)
   
   //get seller/product data via api
-  const getProducts = async () => {
-    let res = await axios.get('/api/products')
+  const getProducts = async (page = 1) => {
+    let res = await axios.get(`/api/products?page=${page}`)
+    setCurrentPage(page)
+    console.log('total pages', res.data)
+    setTotalPages(res.data.total_pages)
     createSellerArray(res.data)
   }
 
@@ -85,12 +90,27 @@ const Products = () => {
       )
     }
   
+  const renderPagNav = () => {
+    
+    let numsJSX =[]
+    for(let i = 1; i <= totalPages; i++){
+      numsJSX.push(<span
+        onClick={()=>getProducts(i)}
+        style={
+          {cursor:'pointer', marginRight: '3px', color: currentPage == i ? 'red':'black'}
+        }>{i}</span>)
+    }
+    console.log('numsjsx', numsJSX.length)
+    return numsJSX
+    
+  }
 
   
   
   return (
     <>
     <div>
+      {renderPagNav()}
       {renderSellers()}
     </div>
     </>
