@@ -16,11 +16,12 @@ const Products = () => {
     setCurrentPage(page)
     console.log('total pages', res.data)
     setTotalPages(res.data.total_pages)
-    createSellerArray(res.data)
+    createSellerArray(res.data.products)
   }
 
   //restructure data from axios for seller product tables in page
   const createSellerArray = (data) =>{
+    console.log(data)
     let ids = [...new Set(data.map( d => d.seller_id ))];
     //set temp seller array to push to, then set non-temp seller array to match
     let sellerArray = []
@@ -90,7 +91,7 @@ const Products = () => {
       )
     }
   
-  const renderPagNav = () => {
+  const renderPageNav = () => {
     
     let numsJSX =[]
     for(let i = 1; i <= totalPages; i++){
@@ -110,7 +111,8 @@ const Products = () => {
   return (
     <>
     <div>
-      {renderPagNav()}
+      <h2>All Products by Seller</h2>
+      <p>Pages: {renderPageNav()}</p>
       {renderSellers()}
     </div>
     </>

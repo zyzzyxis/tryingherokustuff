@@ -2,13 +2,18 @@ class Api::ProductsController < ApplicationController
   before_action :set_page
 
   def index
-    render json: Product.available
+    products= Product.page(@page).available
+    render json: { products: products, total_pages: products.total_pages }
   end
 
+  # def categories_index
+  #   # render json: Product.categories_index
+  #   products = Product.categories_index
+  #   render json: { products: products, total_pages: products.total_pages }
+  # end
+
   def categories_index
-    # render json: Product.categories_index
-    products = Product.page(@page).categories_index
-    render json: { products: products, total_pages: products.total_pages }
+    render json: Product.categories_index
   end
 
   def category
