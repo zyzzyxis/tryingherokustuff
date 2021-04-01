@@ -1,9 +1,12 @@
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import { Card, Dropdown, Form, Select } from 'semantic-ui-react'
-// form at top to pick category, then filters by the category you want
 
 const Categories = () => {
+  //Note: we are not using useEffect in this component because we don't want the products to render until 
+  //a selection has been made
+
+  //set categories for dropdown menu
   const [categories, setCategories] = useState([
     {key: 'All', text: 'All Products', value: 'All'},
     {key: 'Accessories', text: 'Accessories', value: 'Accessories'},
@@ -18,19 +21,23 @@ const Categories = () => {
   ])
 
   const [products, setProducts] = useState([])
+
+  //variable, if user selects "all" for category it will render category under item desc/price
   const [showCategories, setShowCategories] = useState(true)
 
   const handleChange =  async (e, {value}) => {
     try{
+      //if user selects a specific category, set showCategories to false and hide categories form cards rendered
       if(value != 'All'){
-      let res =  await axios.get(`/api/categories/${value}`)
-      setProducts(res.data)
-      setShowCategories(false)
+        let res =  await axios.get(`/api/categories/${value}`)
+        setProducts(res.data)
+        setShowCategories(false)
       }
       else{
-      let res = await axios.get('api/products')
-      setProducts(res.data)
-      setShowCategories(true)
+        //user has selected "All", set showCategories to true and render categories in the cards
+        let res = await axios.get('api/products')
+        setProducts(res.data)
+        setShowCategories(true)
       }
       
     }catch(err){
@@ -49,6 +56,7 @@ const Categories = () => {
             </Card.Header>
             <Card.Meta>
               <p>{`Price: $${p.price}`}</p>
+              {/* if showCategories = true (user has selected "All" categories, add category to the card) */}
               <p>{showCategories && `Category: ${p.category}`}</p>
               
             </Card.Meta>

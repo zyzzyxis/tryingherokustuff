@@ -3,10 +3,11 @@ import { Card, Dropdown } from 'semantic-ui-react'
 import axios from 'axios'
 
 const FindProducts = () => {
+  //set chosen category so we only have to make 1 axios call, in onSellerChange fn.
   const [chosenCategory, setChosenCategory] = useState(null)
   const [products, setProducts] = useState([])
-
   const [sellers, setSellers] = useState([])
+
   const [categories, setCategories] = useState([
     // {key: 'All', text: 'All Products', value: 'All'},
     {key: 'Accessories', text: 'Accessories', value: 'Accessories'},
@@ -20,64 +21,64 @@ const FindProducts = () => {
     {key:'Toys', text: 'Toys', value: 'Toys'}
   ])
 
+  //axios call on mount
+  useEffect (() => {
+    getSellerId()
+  }, [])
+
+  //set chosenCategory for axios call in onSellerChange
   const onCategoryChange = (e, {value}) => {
     setChosenCategory(value)
   }
 
-  useEffect (() => {
-    getSellerId()
-  }, [])
-  
-const normalizeSellerData = (sellerArr) => {
-  return sellerArr.map(seller => { 
-    return {key: seller.id , text: seller.name , value: seller.id}
-  })
-}
-
-const onSellerChange = async (e, {value}) => {
+  //get products based on Category and Seller
+  const onSellerChange = async (e, {value}) => {
   try{
     let res = await axios.get(`/api/products/${chosenCategory}/${value}`)
     setProducts(res.data)
-    console.log(value)
   }catch(err){
     alert(err)
   }
-}
+  }
 
+  //get list of sellers for dropdown menu in page
+  const getSellerId =  async () => {
+    let res = await axios.get(`/api/sellers`)
+    let normalizedSellerData = normalizeSellerData(res.data)
+    setSellers(normalizedSellerData)
+  }
 
-// useEffect (() => {
-//   getSellerId()
-// }, [])
+  //normalize data into objects to feed into <Select> element
+  const normalizeSellerData = (sellerArr) => {
+    return sellerArr.map(seller => { 
+      return {key: seller.id , text: seller.name , value: seller.id}
+    })
+    }
 
-const getSellerId =  async () => {
-  let res = await axios.get(`/api/sellers`)
-  let normalizedSellerData = normalizeSellerData(res.data)
-  setSellers(normalizedSellerData)
-  console.log(sellers)
-}
-
-const renderProducts = () => {
-  return(
-    <Card.Group style={{marginTop: '20px'}}>
-      {products.map( p => (
-        <>
-        <Card style={{padding: '10px'}}>
-          <Card.Header>
-            <h3>{p.description}</h3>
-          </Card.Header>
-          <Card.Meta>
-            <p>{`Price: $${p.price}`}</p>
-          </Card.Meta>
-        </Card>
-        </>
-      ))}
-    </Card.Group>
-  )
-}
+  //render card for each product from onSellerChange axios call
+  const renderProducts = () => {
+    return(
+      <Card.Group style={{marginTop: '20px'}}>
+        {products.map( p => (
+          <>
+          <Card style={{padding: '10px'}}>
+            <Card.Header>
+              <h3>{p.description}</h3>
+            </Card.Header>
+            <Card.Meta>
+              <p>{`Price: $${p.price}`}</p>
+            </Card.Meta>
+          </Card>
+          </>
+        ))}
+      </Card.Group>
+    )
+  }
 
 return (
   
   <>  
+    {/* check to see if sellers is populated before rendering */}
     {sellers.length !== 0 ? (
       <>
       <div>
@@ -91,8 +92,6 @@ return (
           selection
           options={categories}
         />
-        {/* {products && renderProducts()} */}
-        {/* {!products && <p>No Products available</p>} */}
       </div>
       <div>
         <Dropdown
@@ -102,8 +101,6 @@ return (
           selection
           options={sellers}
         />
-        {/* {products && renderProducts()} */}
-        {/* {!products && <p>No Products available</p>} */}
       </div>
       </>
     ) : (<h1>"loading"</h1>)}
